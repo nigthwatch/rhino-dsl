@@ -64,5 +64,12 @@ namespace Rhino.DSL
 		/// <param name="urls">The urls.</param>
 		/// <returns></returns>
         string GetChecksumForUrls(Type dslEngineType, IEnumerable<string> urls);
+        /// <summary>
+        /// Return a standard path form
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="basePath"></param>
+        /// <returns></returns>
+        string NormalizeUrl(string url, string basePath);
     }
 }

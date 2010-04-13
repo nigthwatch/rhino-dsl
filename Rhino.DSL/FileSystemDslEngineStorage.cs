@@ -185,5 +185,22 @@ namespace Rhino.DSL
                 }
             }
         }
+
+        #region IDslEngineStorage Members
+
+        /// <summary>
+        /// Return full path in standard form
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="basePath"></param>
+        /// <returns></returns>
+        public virtual string NormalizeUrl(string url, string basePath)
+        {
+            if (!Path.IsPathRooted(url))
+                url = Path.Combine(basePath, url);
+            return Path.GetFullPath(url);
+        }
+
+        #endregion
     }
 }

@@ -110,10 +110,10 @@ namespace Rhino.DSL
 			Type type = null;
 			engine.Cache.ReadLock(delegate
 			{
-				type = engine.Cache.Get(engine.CanonizeUrl(url));
+				type = engine.Cache.Get(engine.Storage.NormalizeUrl(url, BaseDirectory));
 				if (type == null)
 				{
-					bool recompilation;
+                    bool recompilation;
 					string[] urls = GetUrls(engine, ref url, out recompilation);
 					bool existsInArray = engine.Storage.IsUrlIncludeIn(urls, BaseDirectory, url);
 					if (existsInArray == false)
@@ -195,11 +195,13 @@ namespace Rhino.DSL
 					Type type = engine.GetTypeForUrl(compiledAssembly, batchUrl);
 					if (type == null)
 						throw new InvalidOperationException("Could not find the generated type for: " + batchUrl);
-					engine.Cache.Set(batchUrl, type);
+                    
+                    engine.Cache.Set(engine.Storage.NormalizeUrl(batchUrl, BaseDirectory), type);
+
 				}
 				engine.Storage.NotifyOnChange(urls, delegate(string invalidatedUrl)
 				{
-					engine.Cache.Remove(invalidatedUrl);
+                    engine.Cache.Remove(engine.Storage.NormalizeUrl(invalidatedUrl, BaseDirectory));
 					standAloneCompilation.Add(invalidatedUrl);
 				});
 			});
